@@ -7,13 +7,14 @@ import re
 import warnings
 
 import os
-os.environ['https_proxy'] = "153.96.204.21:80"
+#os.environ['https_proxy'] = "153.96.204.21:80"
 
 dateformat = "%d.%m.%Y %H:%M:%S"
 
 data_url = "https://cas.hansefit.de/redlink/cas/report/check_ins/for_customer"
 authentication_url = 'https://cas.hansefit.de/login'
 credentials_filename = 'credentials'  # contains two lines: username \n password
+ua = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0'
 
 class Checkin:
     def __init__(self, tree_tr):
@@ -51,13 +52,13 @@ class HanseBrowser:
 
         self.browser = mechanize.Browser()
         self.submit_login()
-        html = self.get_usage_page()
+        self.html = self.get_usage_page()
 
     def load_credentials(self, filename):
         filehandle = open(filename)
         try:
-            user = filehandle.readline()
-            password = filehandle.readline()
+            user = filehandle.readline().rstrip()  # strip newline returned by readline()
+            password = filehandle.readline().rstrip()
         except:
             print "password file does not contain two lines"
         if filehandle.readline():
@@ -66,17 +67,17 @@ class HanseBrowser:
 
 
     def submit_login(self):
-        self.browser.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
+        self.browser.addheaders = [('User-agent', ua)]
         self.browser.open(authentication_url)
         self.browser.select_form(nr=0)
         self.browser.form['_username'] = self.username
         self.browser.form['_password'] = self.password
-        self.browser.submit()
+        html = self.browser.submit()
 
     def get_usage_page(self):
         self.browser.open(data_url)
-        self.html = self.browser.response().read()
-        return self.html
+        html = self.browser.response().read()
+        return html
 
     def get_checkins(self):
         #  the entire file is invalid xml, so we get the tbody with a regex
