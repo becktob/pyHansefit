@@ -1,0 +1,2 @@
+import os
+#os.environ['https_proxy'] = "1.2.2.1:80"

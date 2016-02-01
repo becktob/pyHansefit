@@ -6,8 +6,10 @@ import datetime
 import re
 import warnings
 
-import os
-#os.environ['https_proxy'] = "153.96.204.21:80"
+try:
+    import settings
+except:
+    pass
 
 dateformat = "%d.%m.%Y %H:%M:%S"
 
