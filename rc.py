@@ -29,7 +29,7 @@ fhg_braun = color( 70,  41,  21) # 31
 fhg_blgrau= color(  0, 110, 146) # 35
 fhg_grau  = color(168, 175, 175) # 36
 
-color_cycle = [fhg_gruen, fhg_orange, fhg_blau, fhg_rot, fhg_lila]
+color_cycle = [fhg_gruen, fhg_orange, fhg_blau, fhg_rot, fhg_lila, fhg_blgrau, fhg_gelb, fhg_rot, fhg_ggruen]
 color_cycle = [tuple([c*255 for c in color]) for color in color_cycle]
 color_cycle = [ "#%02x%02x%02x"%color for color in color_cycle]
 pylab.rcParams['axes.color_cycle'] = color_cycle

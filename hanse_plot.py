@@ -21,6 +21,7 @@ if __name__=='__main__':
     colormap = dict()
     for loc, color in zip(unique_locations, rc.color_cycle):
         colormap.update({loc: color})
+    print colormap
 
     fig, ax = pylab.subplots()
 
