@@ -39,7 +39,7 @@ class Checkin:
         self.duration = self.date_end - self.date_start
 
         if self.date_end.time() > datetime.time(hour=23, minute=55):
-            warnstring = "limited a {} check-in to two hours.".format(self.location)
+            warnstring = u"limited a {} check-in to two hours.".format(self.location)
             warnings.warn(warnstring.encode("utf-8"))
             self.duration = datetime.timedelta(hours=2)
 
