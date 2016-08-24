@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
 from __future__ import division
 import rc
 import hanse_parse
 import pylab
 import datetime
 
+EURO_PER_MONTH = 35
 
 if __name__=='__main__':
     print "getting data from internet..."
@@ -76,7 +78,8 @@ if __name__=='__main__':
 
     pylab.legend(numpoints=1, loc="lower right")
 
-    title = "{} Checkins in {} Tagen".format(len(checkins), (max(dates) - min(dates)).days)
+    title = "{} Checkins in {} Tagen".format(len(checkins), num_days_plot)
+    title += u"\n {:.2f} € pro Checkin".format(EURO_PER_MONTH * 12 / 365 * num_days_plot / len(checkins))
     pylab.suptitle(title)
 
 
