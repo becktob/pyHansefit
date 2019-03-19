@@ -33,15 +33,7 @@ if __name__=='__main__':
         hour_start = datetime_start.hour + datetime_start.minute/60
         hour_end = datetime_end.hour + datetime_end.minute/60
         size = duration.seconds/60
-        '''
-        pylab.plot([date_no_hour, date_no_hour],
-                   [hour_start, hour_end],
-                   linewidth=20,
-                   solid_capstyle="butt",
-                   #marker = '-',
-                   #markersize = size,
-                   color = color)
-        '''
+
         pylab.bar(datetime.datetime(date_no_hour.year, date_no_hour.month, date_no_hour.day, hour=12),
                   duration.seconds/3600,
                   bottom = hour_start,
@@ -57,18 +49,19 @@ if __name__=='__main__':
     # axes limits and labels
     ax.set_ylim([8, 24])
     ax.set_yticks(range(8, 25, 4))
+    ax.set_ylabel("Uhrzeit")
+    ax.set_xlabel("Datum")
 
     padding = datetime.timedelta(days=1)
     day_from = min(dates) - padding
-    #day_to = max(dates) + padding
     day_to = datetime.datetime.today()
     num_days_plot = (day_to - day_from).days
     ax.set_xlim([day_from, day_to])
     fig.autofmt_xdate()
 
     # Kernzeit!
-    ax.fill_between([day_from, day_to], 9,12, facecolor="lightgray", linewidth=0)
-    ax.fill_between([day_from, day_to], 14,16, facecolor="lightgray", linewidth=0)
+    ax.fill_between([day_from, day_to], 9, 12, facecolor="lightgray", linewidth=0)
+    ax.fill_between([day_from, day_to], 14, 16, facecolor="lightgray", linewidth=0)
 
     # weekends!
     for day in [day_from.date() + datetime.timedelta(days=d) for d in range(num_days_plot+1)]:
