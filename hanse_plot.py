@@ -8,11 +8,11 @@ import datetime
 EURO_PER_MONTH = 35
 
 if __name__=='__main__':
-    print "getting data from internet..."
+    print("getting data from internet...")
     hanse = hanse_parse.HanseBrowser()
     checkins = hanse.get_checkins()
 
-    print "plotting..."
+    print("plotting...")
     dates = [checkin.date_start for checkin in checkins]
     ends = [checkin.date_end for checkin in checkins]
     durations = [checkin.duration for checkin in checkins]
@@ -23,7 +23,7 @@ if __name__=='__main__':
     colormap = dict()
     for loc, color in zip(unique_locations, rc.color_cycle):
         colormap.update({loc: color})
-    print colormap
+    print(colormap)
 
     fig, ax = pylab.subplots()
 
@@ -55,8 +55,8 @@ if __name__=='__main__':
         pylab.plot(dates[0], 0, label=loc, linewidth=10)
 
     # axes limits and labels
-    ax.set_ylim([0, 24])
-    ax.set_yticks(range(0, 25, 4))
+    ax.set_ylim([8, 24])
+    ax.set_yticks(range(8, 25, 4))
 
     padding = datetime.timedelta(days=1)
     day_from = min(dates) - padding
@@ -81,7 +81,5 @@ if __name__=='__main__':
     title = "{} Checkins in {} Tagen".format(len(checkins), num_days_plot)
     title += u"\n {:.2f} € pro Checkin".format(EURO_PER_MONTH * 12 / 365 * num_days_plot / len(checkins))
     pylab.suptitle(title)
-
-
 
     pylab.show()

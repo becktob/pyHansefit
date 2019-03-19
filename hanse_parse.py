@@ -2,7 +2,7 @@
 import xml.dom
 import xml.dom.minidom
 import xml.etree.ElementTree as ET
-import mechanize
+import mechanize  # pip install mechanize
 import datetime
 import re
 import warnings
@@ -18,6 +18,7 @@ data_url = "https://cas.hansefit.de/redlink/cas/report/check_ins/for_customer"
 authentication_url = 'https://cas.hansefit.de/login'
 credentials_filename = 'credentials'  # contains two lines: username \n password
 ua = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0'
+
 
 class Checkin:
     def __init__(self, tree_tr):
@@ -35,19 +36,20 @@ class Checkin:
             self.date_end = datetime.datetime.strptime(end_string, dateformat)
         except ValueError:
             warnstring = "End time not found ({}, {})".format(self.location, self.date_start)
-            warnings.warn(warnstring.encode("utf-8"))
+            warnings.warn(warnstring)
             self.date_end = self.date_start + datetime.timedelta(hours=2)
         self.duration = self.date_end - self.date_start
 
         if self.date_end.time() > datetime.time(hour=23, minute=55):
             warnstring = u"limited a {} check-in to two hours.".format(self.location)
-            warnings.warn(warnstring.encode("utf-8"))
+            warnings.warn(warnstring)
             self.duration = datetime.timedelta(hours=2)
 
     def __repr__(self):
         date_string = self.date_start.strftime("%d.%m.%Y")
         repr = u"Training am {} bei {} ({})".format(date_string, self.location, self.duration)
-        return repr.encode("utf-8")
+        return repr
+
 
 class HanseBrowser:
     def __init__(self):
@@ -63,11 +65,10 @@ class HanseBrowser:
             user = filehandle.readline().rstrip()  # strip newline returned by readline()
             password = filehandle.readline().rstrip()
         except:
-            print "password file does not contain two lines"
+            print("password file does not contain two lines")
         if filehandle.readline():
-            print "password file too long"
+            print("password file too long")
         return user, password
-
 
     def submit_login(self):
         self.browser.addheaders = [('User-agent', ua)]
@@ -84,7 +85,7 @@ class HanseBrowser:
 
     def get_checkins(self):
         #  the entire file is invalid xml, so we get the tbody with a regex
-        searcher = re.compile("(<tbody.*?tbody>)", re.DOTALL)  # DOTALL: dot includes newlines
+        searcher = re.compile(b"(<tbody.*?tbody>)", re.DOTALL)  # DOTALL: dot includes newlines
         tbody = searcher.search(self.html).groups()[0]
 
         #  no this can be parsed and we can work safely with a tree from here
@@ -101,6 +102,6 @@ class HanseBrowser:
 if __name__ == '__main__':
     hanse = HanseBrowser()
     checkins = hanse.get_checkins()
-    print "{} Checkins:".format(len(checkins))
+    print("{} Checkins:".format(len(checkins)))
     for checkin in checkins:
-        print checkin
+        print(checkin)

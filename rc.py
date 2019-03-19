@@ -29,10 +29,10 @@ fhg_braun = color( 70,  41,  21) # 31
 fhg_blgrau= color(  0, 110, 146) # 35
 fhg_grau  = color(168, 175, 175) # 36
 
-color_cycle = [fhg_gruen, fhg_orange, fhg_blau, fhg_rot, fhg_lila, fhg_blgrau, fhg_gelb, fhg_rot, fhg_ggruen]
-color_cycle = [tuple([c*255 for c in color]) for color in color_cycle]
-color_cycle = [ "#%02x%02x%02x"%color for color in color_cycle]
-pylab.rcParams['axes.color_cycle'] = color_cycle
+color_cycle_0_1 = [fhg_gruen, fhg_orange, fhg_blau, fhg_rot, fhg_lila, fhg_blgrau, fhg_gelb, fhg_braun, fhg_grau]
+color_cycle_255 = [tuple([int(c*255) for c in color]) for color in color_cycle_0_1]
+color_cycle = ["#%02x%02x%02x" % color for color in color_cycle_255]
+pylab.rcParams['axes.prop_cycle'] = pylab.cycler('color', color_cycle)
 
 def readfile(filename, cols):
     '''read $filename as csv, expecting $cols entries per row'''
@@ -46,7 +46,7 @@ def readfile(filename, cols):
 
 if __name__ == "__main__":
     lorder = lambda x, x0: -2*(x-x0)/(1+(x-x0)**2)/pylab.pi
-    xs = map(lambda x: x-50, range(100))
+    xs = pylab.linspace(-50, 50, 100)
     ys = map(lambda x: lorder(x/5,-1), xs)
 
     ### Ab hier kopieren als Default-Abbildung ###
@@ -54,7 +54,8 @@ if __name__ == "__main__":
     fig = pylab.figure()
     ax = fig.add_subplot(111)
     for i in range(10):
-        ax.plot(xs, [y+i/10 for y in ys], label="Phase %d"%i)
+        ys = [y+i/10 for y in ys]
+        ax.plot(xs, ys, label="Phase %d"%i)
 
     ax.set_xlabel(r"$x$-Achse / \textmu m")
     ax.set_ylabel(r"$\frac{\mathrm{d}}{\mathrm{d}x}\mathrm{Lor}(x)$")
