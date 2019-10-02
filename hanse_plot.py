@@ -7,10 +7,11 @@ import datetime
 
 EURO_PER_MONTH = 35
 
-if __name__=='__main__':
+if __name__ == '__main__':
     print("getting data from internet...")
     hanse = hanse_parse.HanseBrowser()
     checkins = hanse.get_checkins()
+    hanse_parse.save_checkins("checkins.dat", checkins)
 
     print("plotting...")
     dates = [checkin.date_start for checkin in checkins]
@@ -36,14 +37,14 @@ if __name__=='__main__':
 
         pylab.bar(datetime.datetime(date_no_hour.year, date_no_hour.month, date_no_hour.day, hour=12),
                   duration.seconds/3600,
-                  bottom = hour_start,
+                  bottom=hour_start,
                   width=0.7,
                   color=color,
                   linewidth=0,
-                  align = "center")
+                  align="center")
 
     for loc in unique_locations:
-        color = colormap[location]
+        color = colormap[loc]
         pylab.plot(dates[0], 0, label=loc, linewidth=10)
 
     # axes limits and labels
@@ -69,7 +70,7 @@ if __name__=='__main__':
             ax.fill_between([day, day + datetime.timedelta(days=1)], 0, 24,
                             facecolor="lightgray", linewidth=0)
 
-    pylab.legend(numpoints=1, loc="lower right")
+    pylab.legend(numpoints=1, loc="lower left")
 
     title = "{} Checkins in {} Tagen".format(len(checkins), num_days_plot)
     title += u"\n {:.2f} € pro Checkin".format(EURO_PER_MONTH * 12 / 365 * num_days_plot / len(checkins))
