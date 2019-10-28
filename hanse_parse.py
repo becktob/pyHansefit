@@ -123,7 +123,10 @@ class HanseBrowser:
         return checkins
 
 
-def load_checkins(fname:str) -> List[Checkin]:
+def load_checkins(fname: str) -> List[Checkin]:
+    if not os.path.isfile(fname):
+        return []
+
     with open(fname) as fhandle:
         return [Checkin(line) for line in fhandle]
 
@@ -131,12 +134,15 @@ def load_checkins(fname:str) -> List[Checkin]:
 def save_checkins(fname: str, checkins: List[Checkin]):
     old_checkins = load_checkins(fname)
     print("found {} old checkins".format(len(old_checkins)))
-    last_checkin = old_checkins[-1]
+
+    last_checkin_date = datetime.datetime(year=2000, month=1, day=1)
+    if len(old_checkins) > 0:
+        last_checkin = old_checkins[-1].date_start
 
     new = 0
     with open(fname, "a") as fhandle:
 
-        for ch in (ch for ch in checkins if ch.date_start > last_checkin.date_start):
+        for ch in (ch for ch in checkins if ch.date_start > last_checkin_date):
             fhandle.write(repr(ch) + "\n")
             new += 1
     print("wrote {} checkins to {}, skipped {}".format(new, fname, len(checkins)-new))
